@@ -36,7 +36,15 @@
    ```
    java -Dspring.datasource.url=jdbc:postgresql://localhost:5432/app -jar artifacts/aqa-shop.jar
    ```
-
+3. Для запуска тестов необходимо ввести следующую команду
+   * Для MySQL:
+```
+./gradlew clean test "-Ddb.url=jdbc:mysql://localhost:3306/app"
+```
+* Для PostgreSQL:
+```
+./gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app"
+```
 ## Лицензия
 
 Этот проект лицензирован под лицензией MIT - подробности можно найти в файле [LICENSE.md](LICENSE.md)
