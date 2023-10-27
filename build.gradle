@@ -23,8 +23,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'io.github.bonigarcia:webdrivermanager:5.4.1'
-    testImplementation 'com.codeborne:selenide:6.13.0'
+    testImplementation 'com.codeborne:selenide:6.17.2'
     testImplementation 'com.github.javafaker:javafaker:1.0.2'
     testImplementation 'mysql:mysql-connector-java:8.0.30'
     testImplementation 'org.postgresql:postgresql:42.5.1'

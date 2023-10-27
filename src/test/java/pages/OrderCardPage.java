@@ -33,34 +33,12 @@ public class OrderCardPage {
         return month.getValue();
     }
 
-    public void checkApprovedNotification() {
-        SelenideElement successfulNotification = $(".notification_status_ok .notification__content").shouldHave(Condition.text("Операция одобрена Банком."), Duration.ofMillis(15000));
-        successfulNotification.shouldBe(Condition.visible);
+    public void checkNotification(String text) {
+        SelenideElement notification = $(".notification__content").shouldHave(Condition.text(text), Duration.ofMillis(15000));
+        notification.shouldBe(Condition.visible);
     }
 
-    public void checkDeclinedNotification() {
-        SelenideElement declineNotification = $(".notification_status_error .notification__content").shouldHave(Condition.text("Ошибка! Банк отказал в проведении операции."), Duration.ofMillis(15000));
-        declineNotification.shouldBe(Condition.visible);
-    }
-
-
-    public void checkWrongFormatNotification() {
-        SelenideElement wrongFormat = $(".input__sub").shouldHave(Condition.text("Неверный формат"));
-        wrongFormat.shouldBe(Condition.visible);
-    }
-
-    public void checkRequiredFieldNotification() {
-        SelenideElement empty = $(".input__sub").shouldHave(Condition.text("Поле обязательно для заполнения"));
-        empty.shouldBe(Condition.visible);
-    }
-
-    public void checkExpiredNotification() {
-        SelenideElement expired = $(".input__sub").shouldHave(Condition.text("Истёк срок действия карты"));
-        expired.shouldBe(Condition.visible);
-    }
-
-    public void checkWrongValidityNotification() {
-        SelenideElement expired = $(".input__sub").shouldHave(Condition.text("Неверно указан срок действия карты"));
-        expired.shouldBe(Condition.visible);
+    public void checkErrorMessage(String text) {
+        $(".input__sub").shouldHave(Condition.text(text)).shouldBe(Condition.visible);
     }
 }

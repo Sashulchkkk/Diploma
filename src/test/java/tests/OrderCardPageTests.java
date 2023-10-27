@@ -6,7 +6,6 @@ import data.SQLHelper;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import pages.StartPage;
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +17,6 @@ public class OrderCardPageTests {
 
     @BeforeAll
     static void setUpAll() {
-        WebDriverManager.chromedriver().driverVersion("117.0").setup();
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
@@ -39,7 +37,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCard();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkApprovedNotification();
+        orderPage.checkNotification("Операция одобрена Банком.");
         assertEquals("APPROVED", SQLHelper.getPaymentStatus());
     }
 
@@ -50,7 +48,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardWithoutSpaces();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkApprovedNotification();
+        orderPage.checkNotification("Операция одобрена Банком.");
         assertEquals("APPROVED", SQLHelper.getPaymentStatus());
     }
 
@@ -61,7 +59,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardDoubleSurname();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkApprovedNotification();
+        orderPage.checkNotification("Операция одобрена Банком.");
         assertEquals("APPROVED", SQLHelper.getPaymentStatus());
     }
 
@@ -72,7 +70,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getCardWithoutCardNumber();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkRequiredFieldNotification();
+        orderPage.checkErrorMessage("Поле обязательно для заполнения");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -83,7 +81,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getCardWith15DigitCardNumber();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkWrongFormatNotification();
+        orderPage.checkErrorMessage("Неверный формат");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -104,7 +102,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getCardWithBadCharactersInCardNumber();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkWrongFormatNotification();
+        orderPage.checkErrorMessage("Неверный формат");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -115,7 +113,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardWithNoMonth();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkRequiredFieldNotification();
+        orderPage.checkErrorMessage("Поле обязательно для заполнения");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -126,7 +124,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getExpiredCard1Month();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkExpiredNotification();
+        orderPage.checkErrorMessage("Истёк срок действия карты");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -147,7 +145,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardMonthIs00();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkWrongValidityNotification();
+        orderPage.checkErrorMessage("Неверно указан срок действия карты");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -158,7 +156,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardMonthIs13();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkWrongValidityNotification();
+        orderPage.checkErrorMessage("Неверно указан срок действия карты");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -169,7 +167,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardWithNoYear();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkRequiredFieldNotification();
+        orderPage.checkErrorMessage("Поле обязательно для заполнения");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -180,7 +178,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getExpiredCard1Year();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkExpiredNotification();
+        orderPage.checkErrorMessage("Истёк срок действия карты");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -191,7 +189,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardWithNoCardHolder();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkRequiredFieldNotification();
+        orderPage.checkErrorMessage("Поле обязательно для заполнения");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -202,7 +200,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardWithCardHolderInCyrillic();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkWrongFormatNotification();
+        orderPage.checkErrorMessage("Неверный формат");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -213,7 +211,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getCardWithBadCharactersInCardHolder();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkWrongFormatNotification();
+        orderPage.checkErrorMessage("Неверный формат");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -224,7 +222,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardWithNoCvcCvv();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkRequiredFieldNotification();
+        orderPage.checkErrorMessage("Поле обязательно для заполнения");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -235,7 +233,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getDeclinedCard();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkDeclinedNotification();
+        orderPage.checkNotification("Ошибка! Банк отказал в проведении операции.");
         assertEquals("DECLINED", SQLHelper.getPaymentStatus());
     }
 
@@ -246,7 +244,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getFutureCard();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkWrongValidityNotification();
+        orderPage.checkErrorMessage("Неверно указан срок действия карты");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -257,7 +255,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardTwoDigitCvcCvv();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkWrongFormatNotification();
+        orderPage.checkErrorMessage("Неверный формат");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 
@@ -268,7 +266,7 @@ public class OrderCardPageTests {
         var cardInfo = DataHelper.getApprovedCardCvcCvvIs000();
         var orderPage = startPage.goToOrderCardPage();
         orderPage.insertCardData(cardInfo);
-        orderPage.checkWrongFormatNotification();
+        orderPage.checkErrorMessage("Неверный формат");
         assertEquals("0", SQLHelper.getOrderCount());
     }
 }
